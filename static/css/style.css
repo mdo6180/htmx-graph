@@ -1,0 +1,18 @@
+/* Select the element by its class */
+.blue-text {
+    color: blue;
+}
+
+.red-text {
+    color: red;
+}
+
+.htmx-indicator{
+    display:none;
+}
+.htmx-request .htmx-indicator{
+    display:inline;
+}
+.htmx-request.htmx-indicator{
+    display:inline;
+}
