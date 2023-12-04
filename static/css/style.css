@@ -17,6 +17,10 @@
     display:inline;
 }
 
+body {
+    margin: 0px;   
+}
+
 #mynetwork {
     width: 600px;
     height: 400px;

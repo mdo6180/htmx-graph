@@ -77,3 +77,25 @@ def d3_practice():
         ]
     } 
     return render_template("d3_practice.html", json_data=json_data)
+
+
+@app.route("/home")
+def home():
+    nodes = [
+        {"name": "preprocessing", "endpoint": "/preprocessing"},
+        {"name": "training", "endpoint": "/training"},
+        {"name": "evaluation", "endpoint": "/evaluation"},
+    ]
+    return render_template("home.html", nodes=nodes, title="Anacostia")
+
+@app.route("/preprocessing")
+def preprocessing():
+    return "<h1>preprocessing</h1>"
+
+@app.route("/training")
+def training():
+    return "<h1>training</h1>"
+
+@app.route("/evaluation")
+def evaluation():
+    return "<h1>evaluation</h1>"
