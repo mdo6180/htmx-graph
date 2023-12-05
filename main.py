@@ -90,7 +90,7 @@ def index():
 
 @app.route("/preprocessing")
 def preprocessing():
-    return "<h1>preprocessing</h1>"
+    return '<h1 class="blue-text">preprocessing</h1>'
 
 @app.route("/training")
 def training():

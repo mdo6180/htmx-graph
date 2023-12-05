@@ -15,7 +15,17 @@
         <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
         
         <!-- custom CSS and JS for node UIs -->
-        {% block head %}{% endblock %}
+        {% for stylesheet in stylesheets %}
+        <link rel="stylesheet" type="text/css" href="{{ stylesheet }}">
+        {% endfor %}
+
+        {% for script in scripts %}
+        <script src="{{ script }}" type="text/javascript"></script>
+        {% endfor %}
+
+        <!-- load node specific resources 
+        <link rel="stylesheet" type="text/css" hx-get="/resources" hx-target="this" hx-swap="outerHTML" hx-trigger="load">
+        -->
     </head>
     <body>
         <div class="toolbar">
