@@ -5,7 +5,7 @@
         <title>{{title}}</title>
 
         <!-- custom CSS for Anacostia landing page -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/home.css') }}">
         <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
         
         <!-- Htmx -->
@@ -14,17 +14,25 @@
         <!-- Hyperscript -->
         <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
         
-        <!-- Vis.js -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
         <!-- custom CSS and JS for node UIs -->
         {% block head %}{% endblock %}
     </head>
     <body>
-        <!-- add toolbar here -->
+        <div class="toolbar">
+            <a href="/" class="home-icon"><img src="{{ url_for('static', filename='img/home-icon.svg') }}" alt="Home"></a>
+            <div class="title">Anacostia</div>
+            <div class="dropdown">
+                <button class="dropbtn">Nodes</button>
+                <div class="dropdown-content">
+                    {% for node in nodes %}
+                    <div hx-get="{{ node.endpoint }}" hx-target="#node_content" hx-swap="innerHTML" hx-trigger="click">
+                        {{ node.name }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
 
-        <!-- change block name from body to content -->
-        {% block body %}{% endblock %}
+        <div id="node_content"></div>
     </body>
 </html>
