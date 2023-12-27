@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools >= 67.6"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "test_package"
+version = "0.1.0"
+authors = [
+    {name="Minh Quan Do", email = "mdo6180@gmail.com"}
+]
+description = "A simple python package for testing"
+dependencies = [
+    "fastapi",
+]
+
