@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{{title}}</title>
+
+        <!-- custom CSS for Anacostia landing page -->
+        <link rel="stylesheet" type="text/css" href="/static/css/home.css">
+        <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
+        
+        <!-- Htmx -->
+        <script src="/static/js/htmx.min.js" type="text/javascript"></script>
+
+        <!-- Hyperscript -->
+        <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+
+        {% block head %}{% endblock %}
+        
+        <!-- custom CSS and JS for node UIs 
+        {% for stylesheet in stylesheets %}
+        <link rel="stylesheet" type="text/css" href="{{ stylesheet }}">
+        {% endfor %}
+
+        {% for script in scripts %}
+        <script src="{{ script }}" type="text/javascript"></script>
+        {% endfor %}
+        -->
+
+        <!-- load node specific resources 
+        <link rel="stylesheet" type="text/css" hx-get="/resources" hx-target="this" hx-swap="outerHTML" hx-trigger="load">
+        -->
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+    </body>
+</html>
