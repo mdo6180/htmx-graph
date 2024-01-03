@@ -1,0 +1,100 @@
+{% extends "d3-base.html" %}
+
+{% block head %}
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<script src="/static/js/dagre.min.js"></script>
+<script src="/static/js/dagre-d3.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/css/index.css">
+
+<style id="css">
+    .node rect {
+      stroke: #333;
+      fill: #fff;
+      stroke-width: 1px;
+    }
+    
+    .edgePath path {
+      stroke: #333;
+      fill: #333;
+      stroke-width: 1.5px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<h1>Anacostia Pipeline</h1>
+
+<!-- container where graph will be rendered -->
+<svg width="960" height="600"><g/></svg>
+
+<section>
+    <div id="insert_text"></div>
+    <p>Potomac AI Inc.</p>
+</section>
+
+<script type="">
+    // import json data for the graph structure from FastAPI
+    var graph_data = {{ json_data | tojson | safe }};
+    var nodes = graph_data.nodes;
+    var edges = graph_data.links;
+</script>
+
+<script>
+    // Create a new directed graph 
+    var g = new dagre.graphlib.Graph({ directed: true, compound: false, multigraph: false });
+
+    // Set an object for the graph label
+    g.setGraph({});
+
+    // Add nodes to the graph. 
+    // Note: the order of when the nodes are declared does not determine the layout of the graph.
+    // Note: in the future, the width, height, and enpoint attributes will be a part of json_data
+    g.setNode("kspacey",    { label: "Kevin Spacey",  width: 144, height: 100, endpoint: "/node/kspacey" });
+    g.setNode("swilliams",  { label: "Saul Williams", width: 160, height: 100, endpoint: "/node/swilliams" });
+    g.setNode("bpitt",      { label: "Brad Pitt",     width: 108, height: 100, endpoint: "/node/bpitt" });
+    g.setNode("hford",      { label: "Harrison Ford", width: 168, height: 100, endpoint: "/node/hford" });
+    g.setNode("lwilson",    { label: "Luke Wilson",   width: 144, height: 100, endpoint: "/node/lwilson" });
+    g.setNode("kbacon",     { label: "Kevin Bacon",   width: 121, height: 100, endpoint: "/node/kbacon" });
+
+    // Add edges to the graph.
+    g.setEdge("kspacey",   "swilliams", { arrowhead: "vee" });
+    g.setEdge("swilliams", "kbacon", { arrowhead: "vee" });
+    g.setEdge("bpitt",     "kbacon", { arrowhead: "vee" });
+    g.setEdge("hford",     "lwilson", { arrowhead: "vee" });
+    g.setEdge("lwilson",   "kbacon", { arrowhead: "vee" });
+
+    var svg = d3.select("svg");
+    var inner = svg.select("g");
+
+    // Set up zoom support
+    function zoomed(event) {
+        inner.attr("transform", event.transform);
+    }
+    svg.call(d3.zoom().on("zoom", zoomed));
+
+    // Create the renderer
+    var render = new dagreD3.render();
+
+    // Run the renderer. This is what draws the final graph.
+    render(inner, g);
+
+    // select node containers
+    const node_container = inner.selectAll(".node");
+
+    // apply Hyperscript to the entire node container
+    node_container.attr("_", (v) => { return "on click call alert('You clicked " + g.node(v).label + "!')"; });
+
+    // apply HTMX attributes to the entire node container
+    // in the future, we will use the endpoint attribute to determine the endpoint for the HTMX request
+    node_container.attr("hx-get", (v) => { return "/node/" + g.node(v).label.replace(/\s/g, "_")})
+                  .attr("hx-trigger", "click")
+                  .attr("hx-target", "#insert_text")
+                  .attr("hx-swap", "innerHTML");
+    
+    // apply SVG attributes to the rect element
+    const rect = inner.selectAll("rect");
+    rect.attr("rx", 10);
+    rect.attr("ry", 10);
+
+</script>
+{% endblock %}
