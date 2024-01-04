@@ -51,7 +51,13 @@
     nodes.forEach(function(node) {
         g.setNode(
             node.id, 
-            { label: node.label, width: node.width, height: node.height, endpoint: node.endpoint }
+            { 
+                label: node.label, 
+                width: node.width, 
+                height: node.height, 
+                endpoint: node.endpoint,
+                progress_endpoint: node.progress_endpoint
+            }
         );
     });
 
@@ -92,6 +98,17 @@
     const rect = inner.selectAll("rect");
     rect.attr("rx", 10);
     rect.attr("ry", 10);
+
+    const text = inner.selectAll(".node .label g text");
+    text.append("tspan")
+        .text("0%")
+        .attr("space", "preserve")
+        .attr("dy", "1em")
+        .attr("x", "1")
+        .attr("hx-get", (v) => { return g.node(v).progress_endpoint; })
+        .attr("hx-target", "this")
+        .attr("hx-trigger", "every 1s")
+        .attr("hx-swap", "innerHTML");
 
 </script>
 {% endblock %}
