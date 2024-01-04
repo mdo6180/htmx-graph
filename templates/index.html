@@ -36,7 +36,7 @@
     // import json data for the graph structure from FastAPI
     var graph_data = {{ json_data | tojson | safe }};
     var nodes = graph_data.nodes;
-    var edges = graph_data.links;
+    var edges = graph_data.edges;
 </script>
 
 <script>
@@ -48,20 +48,17 @@
 
     // Add nodes to the graph. 
     // Note: the order of when the nodes are declared does not determine the layout of the graph.
-    // Note: in the future, the width, height, and enpoint attributes will be a part of json_data
-    g.setNode("kspacey",    { label: "Kevin Spacey",  width: 144, height: 100, endpoint: "/node/kspacey" });
-    g.setNode("swilliams",  { label: "Saul Williams", width: 160, height: 100, endpoint: "/node/swilliams" });
-    g.setNode("bpitt",      { label: "Brad Pitt",     width: 108, height: 100, endpoint: "/node/bpitt" });
-    g.setNode("hford",      { label: "Harrison Ford", width: 168, height: 100, endpoint: "/node/hford" });
-    g.setNode("lwilson",    { label: "Luke Wilson",   width: 144, height: 100, endpoint: "/node/lwilson" });
-    g.setNode("kbacon",     { label: "Kevin Bacon",   width: 121, height: 100, endpoint: "/node/kbacon" });
+    nodes.forEach(function(node) {
+        g.setNode(
+            node.id, 
+            { label: node.label, width: node.width, height: node.height, endpoint: node.endpoint }
+        );
+    });
 
     // Add edges to the graph.
-    g.setEdge("kspacey",   "swilliams", { arrowhead: "vee" });
-    g.setEdge("swilliams", "kbacon", { arrowhead: "vee" });
-    g.setEdge("bpitt",     "kbacon", { arrowhead: "vee" });
-    g.setEdge("hford",     "lwilson", { arrowhead: "vee" });
-    g.setEdge("lwilson",   "kbacon", { arrowhead: "vee" });
+    edges.forEach(function(edge) {
+        g.setEdge(edge.source, edge.target, { arrowhead: "vee" });
+    });
 
     var svg = d3.select("svg");
     var inner = svg.select("g");
@@ -86,7 +83,7 @@
 
     // apply HTMX attributes to the entire node container
     // in the future, we will use the endpoint attribute to determine the endpoint for the HTMX request
-    node_container.attr("hx-get", (v) => { return "/node/" + g.node(v).label.replace(/\s/g, "_")})
+    node_container.attr("hx-get", (v) => { return g.node(v).endpoint; })
                   .attr("hx-trigger", "click")
                   .attr("hx-target", "#insert_text")
                   .attr("hx-swap", "innerHTML");

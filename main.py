@@ -18,18 +18,19 @@ app.mount("/app2", app2)
 
 json_data = {
     "nodes": [
-        {"id": 1, "name": "A"}, {"id": 2, "name": "B"},
-        {"id": 3, "name": "C"}, {"id": 4, "name": "D"},
-        {"id": 5, "name": "E"}, {"id": 6, "name": "F"},
-        {"id": 7, "name": "G"}, {"id": 8, "name": "H"},
-        {"id": 9, "name": "I"}, {"id": 10, "name": "J"}
+        { "id": "kspacey", "label": "Kevin Spacey",  "width": 144, "height": 100, "endpoint": "/node/kspacey" },
+        { "id": "swilliams", "label": "Saul Williams", "width": 160, "height": 100, "endpoint": "/node/swilliams" },
+        { "id": "bpitt", "label": "Brad Pitt",     "width": 108, "height": 100, "endpoint": "/node/bpitt" },
+        { "id": "hford", "label": "Harrison Ford", "width": 168, "height": 100, "endpoint": "/node/hford" },
+        { "id": "lwilson", "label": "Luke Wilson",   "width": 144, "height": 100, "endpoint": "/node/lwilson" },
+        { "id": "kbacon", "label": "Kevin Bacon",   "width": 121, "height": 100, "endpoint": "/node/kbacon" }
     ],
-    "links": [
-        {"source": 1, "target": 2}, {"source": 3, "target": 2}, 
-        {"source": 4, "target": 5}, {"source": 6, "target": 5},
-        {"source": 7, "target": 8}, {"source": 9, "target": 8}, 
-        {"source": 10, "target": 8}, {"source": 4, "target": 8},
-        {"source": 5, "target": 9}, {"source": 2, "target": 6}
+    "edges": [
+        {"source": "kspacey", "target": "swilliams", "arrowhead": "vee" },
+        {"source": "swilliams", "target": "kbacon", "arrowhead": "vee" },
+        {"source": "bpitt", "target": "kbacon", "arrowhead": "vee" },
+        {"source": "hford", "target": "lwilson", "arrowhead": "vee" },
+        {"source": "lwilson", "target": "kbacon", "arrowhead": "vee" }
     ]
 }
 
@@ -43,14 +44,16 @@ async def index(request: Request):
     ]
     return templates.TemplateResponse("base.html", {"request": request, "nodes": nodes, "title": "Anacostia Pipeline"})
 
+
 @app.get("/directed_graph", response_class=HTMLResponse)
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "json_data": json_data, "title": "Anacostia Pipeline"})
 
-@app.get("/node/{node_name}", response_class=HTMLResponse)
-async def insert(request: Request, node_name: str):
-    return f"""
-    <div>
-        <p> node clicked: {node_name.replace("_", " ")} </p>
-    </div>
-    """
+
+@app.get("/node/{node_id}", response_class=HTMLResponse)
+async def insert(request: Request, node_id: str):
+    for node in json_data["nodes"]:
+        if node["id"] == node_id:
+            return f"""<p> node clicked: {node["label"]} </p>"""
+        
+    return "<p> node does not exist </p>"
