@@ -11,5 +11,6 @@ authors = [
 description = "A simple python package for testing"
 dependencies = [
     "fastapi",
+    "networkx"
 ]
 
