@@ -20,7 +20,8 @@ section p {
 }
 
 svg {
-  border: 1px solid #ccc;
+  border: 1px solid #ccc; 
+  border-radius: 7px;
   overflow: hidden;
   margin: 0 auto;
 }

@@ -18,12 +18,12 @@ app.mount("/app2", app2)
 
 json_data = {
     "nodes": [
-        { "id": "kspacey", "label": "Kevin Spacey",  "width": 144, "height": 100, "endpoint": "/node/kspacey" },
+        { "id": "kspacey", "label": "Kevin Spacey", "width": 144, "height": 100, "endpoint": "/node/kspacey" },
         { "id": "swilliams", "label": "Saul Williams", "width": 160, "height": 100, "endpoint": "/node/swilliams" },
-        { "id": "bpitt", "label": "Brad Pitt",     "width": 108, "height": 100, "endpoint": "/node/bpitt" },
+        { "id": "bpitt", "label": "Brad Pitt", "width": 108, "height": 100, "endpoint": "/node/bpitt" },
         { "id": "hford", "label": "Harrison Ford", "width": 168, "height": 100, "endpoint": "/node/hford" },
-        { "id": "lwilson", "label": "Luke Wilson",   "width": 144, "height": 100, "endpoint": "/node/lwilson" },
-        { "id": "kbacon", "label": "Kevin Bacon",   "width": 121, "height": 100, "endpoint": "/node/kbacon" }
+        { "id": "lwilson", "label": "Luke Wilson", "width": 144, "height": 100, "endpoint": "/node/lwilson" },
+        { "id": "kbacon", "label": "Kevin Bacon", "width": 121, "height": 100, "endpoint": "/node/kbacon" }
     ],
     "edges": [
         {"source": "kspacey", "target": "swilliams", "arrowhead": "vee" },
@@ -42,12 +42,12 @@ async def index(request: Request):
         {"name": "training", "endpoint": "/app2"},
         {"name": "evaluation", "endpoint": "/evaluation"},
     ]
-    return templates.TemplateResponse("base.html", {"request": request, "nodes": nodes, "title": "Anacostia Pipeline"})
+    return templates.TemplateResponse("base.html", {"request": request, "nodes": nodes})
 
 
 @app.get("/directed_graph", response_class=HTMLResponse)
 async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "json_data": json_data, "title": "Anacostia Pipeline"})
+    return templates.TemplateResponse("index.html", {"request": request, "json_data": json_data})
 
 
 @app.get("/node/{node_id}", response_class=HTMLResponse)
