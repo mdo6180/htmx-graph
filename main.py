@@ -16,6 +16,23 @@ app.mount("/app1", app1)
 app.mount("/app2", app2)
 
 
+json_data = {
+    "nodes": [
+        {"id": 1, "name": "A"}, {"id": 2, "name": "B"},
+        {"id": 3, "name": "C"}, {"id": 4, "name": "D"},
+        {"id": 5, "name": "E"}, {"id": 6, "name": "F"},
+        {"id": 7, "name": "G"}, {"id": 8, "name": "H"},
+        {"id": 9, "name": "I"}, {"id": 10, "name": "J"}
+    ],
+    "links": [
+        {"source": 1, "target": 2}, {"source": 3, "target": 2}, 
+        {"source": 4, "target": 5}, {"source": 6, "target": 5},
+        {"source": 7, "target": 8}, {"source": 9, "target": 8}, 
+        {"source": 10, "target": 8}, {"source": 4, "target": 8},
+        {"source": 5, "target": 9}, {"source": 2, "target": 6}
+    ]
+}
+
 
 @app.get('/', response_class=HTMLResponse)
 async def index(request: Request):
@@ -26,97 +43,14 @@ async def index(request: Request):
     ]
     return templates.TemplateResponse("base.html", {"request": request, "nodes": nodes, "title": "Anacostia Pipeline"})
 
-@app.get("/evaluation", response_class=HTMLResponse)
-async def evaluation():
-    return "<h1>evaluation</h1>"
+@app.get("/directed_graph", response_class=HTMLResponse)
+async def index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request, "json_data": json_data, "title": "Anacostia Pipeline"})
 
-@app.get("/d3", response_class=HTMLResponse)
-async def d3(request: Request):
-    json_data = {
-        "nodes": [
-            {
-                "id": 1,
-                "name": "A"
-            },
-            {
-                "id": 2,
-                "name": "B"
-            },
-            {
-                "id": 3,
-                "name": "C"
-            },
-            {
-                "id": 4,
-                "name": "D"
-            },
-            {
-                "id": 5,
-                "name": "E"
-            },
-            {
-                "id": 6,
-                "name": "F"
-            },
-            {
-                "id": 7,
-                "name": "G"
-            },
-            {
-                "id": 8,
-                "name": "H"
-            },
-            {
-                "id": 9,
-                "name": "I"
-            },
-            {
-                "id": 10,
-                "name": "J"
-            }
-        ],
-        "links": [
-            {
-                "source": 1,
-                "target": 2
-            },
-            {
-                "source": 1,
-                "target": 5
-            },
-            {
-                "source": 1,
-                "target": 6
-            },
-
-            {
-                "source": 2,
-                "target": 3
-            },
-            {
-                "source": 2,
-                "target": 7
-            },
-            {
-                "source": 3,
-                "target": 4
-            },
-            {
-                "source": 8,
-                "target": 3
-            },
-            {
-                "source": 4,
-                "target": 5
-            },
-            {
-                "source": 4,
-                "target": 9
-            },
-            {
-                "source": 5,
-                "target": 10
-            }
-        ]
-    }
-    return templates.TemplateResponse("d3_practice.html", {"request": request, "json_data": json_data, "title": "D3 Practice"})
+@app.get("/node/{node_name}", response_class=HTMLResponse)
+async def insert(request: Request, node_name: str):
+    return f"""
+    <div>
+        <p> node clicked: {node_name.replace("_", " ")} </p>
+    </div>
+    """
