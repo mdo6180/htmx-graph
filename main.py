@@ -40,7 +40,7 @@ json_data = {
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "nodes": json_data["nodes"], "json_data": json_data})
+    return templates.TemplateResponse("dag.html", {"request": request, "nodes": json_data["nodes"], "json_data": json_data})
 
 
 @app.get("/node/{node_id}", response_class=HTMLResponse)
