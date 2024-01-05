@@ -83,9 +83,6 @@
     // select node containers
     const node_container = inner.selectAll(".node");
 
-    // apply Hyperscript to the entire node container
-    node_container.attr("_", (v) => { return "on click call alert('You clicked " + g.node(v).label + "!')"; });
-
     // apply HTMX attributes to the entire node container
     // in the future, we will use the endpoint attribute to determine the endpoint for the HTMX request
     node_container.attr("hx-get", (v) => { return g.node(v).endpoint; })
