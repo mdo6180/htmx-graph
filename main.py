@@ -38,19 +38,9 @@ json_data = {
 }
 
 
-@app.get('/', response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    nodes = [
-        {"name": "preprocessing", "endpoint": "/app1"},
-        {"name": "training", "endpoint": "/app2"},
-        {"name": "evaluation", "endpoint": "/evaluation"},
-    ]
-    return templates.TemplateResponse("base.html", {"request": request, "nodes": nodes})
-
-
-@app.get("/directed_graph", response_class=HTMLResponse)
-async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "json_data": json_data})
+    return templates.TemplateResponse("index.html", {"request": request, "nodes": json_data["nodes"], "json_data": json_data})
 
 
 @app.get("/node/{node_id}", response_class=HTMLResponse)

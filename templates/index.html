@@ -22,15 +22,15 @@
 {% endblock %}
 
 {% block body %}
-<h1>Anacostia Pipeline</h1>
+<div id="graph" class="graph">
+    <!-- container where graph will be rendered -->
+    <svg width="960" height="600"><g/></svg>
 
-<!-- container where graph will be rendered -->
-<svg width="960" height="600"><g/></svg>
-
-<section>
-    <div id="insert_text"></div>
-    <p>Potomac AI Inc.</p>
-</section>
+    <section>
+        <div id="insert_text"></div>
+        <p>Potomac AI Inc.</p>
+    </section>
+</div>
 
 <script type="">
     // import json data for the graph structure from FastAPI
