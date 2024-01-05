@@ -14,8 +14,6 @@
     }
     
     .edgePath path {
-      stroke: #333;
-      fill: #333;
       stroke-width: 1.5px;
     }
 </style>
@@ -62,7 +60,14 @@
 
     // Add edges to the graph.
     edges.forEach(function(edge) {
-        g.setEdge(edge.source, edge.target, { arrowhead: "vee" });
+        g.setEdge(
+            edge.source, 
+            edge.target, 
+            { 
+                arrowhead: "vee",
+                edge_endpoint: edge.edge_endpoint
+            }
+        );
     });
 
     var svg = d3.select("svg");
@@ -105,6 +110,18 @@
         .attr("hx-target", "this")
         .attr("hx-trigger", "every 1s")
         .attr("hx-swap", "innerHTML");
+    
+    const edge = inner.selectAll(".edgePath path.path");
+    edge.attr("stroke", "#333");
+
+    const edge_container = inner.selectAll(".edgePath");
+    edge_container.attr("hx-get", (e) => { return g.edge(e).edge_endpoint; })
+        .attr("hx-trigger", "click")
+        .attr("hx-target", "#graph")
+        .attr("hx-swap", "outerHTML");
+    
+    const arrowhead = inner.selectAll(".edgePath defs marker");
+    arrowhead.attr("fill", "blue");
 
     // Center the graph
     var initialScale = 1;

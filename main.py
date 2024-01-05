@@ -21,7 +21,7 @@ app.mount("/app2", app2)
 
 json_data = {
     "nodes": [
-        { "id": "kspacey", "label": "Kevin Spacey", "width": 144, "height": 100, "endpoint": "/node/kspacey", "progress_endpoint": "/progress/kspacey" },
+        { "id": "kspacey", "label": "Kevin Spacey", "width": 144, "height": 100, "endpoint": "/node/kspacey", "progress_endpoint": "/progress/kspacey", },
         { "id": "swilliams", "label": "Saul Williams", "width": 160, "height": 100, "endpoint": "/node/swilliams", "progress_endpoint": "/progress/swilliams" },
         { "id": "bpitt", "label": "Brad Pitt", "width": 108, "height": 100, "endpoint": "/node/bpitt", "progress_endpoint": "/progress/bpitt" },
         { "id": "hford", "label": "Harrison Ford", "width": 168, "height": 100, "endpoint": "/node/hford", "progress_endpoint": "/progress/hford" },
@@ -29,11 +29,11 @@ json_data = {
         { "id": "kbacon", "label": "Kevin Bacon", "width": 121, "height": 100, "endpoint": "/node/kbacon", "progress_endpoint": "/progress/kbacon" }
     ],
     "edges": [
-        {"source": "kspacey", "target": "swilliams", "arrowhead": "vee" },
-        {"source": "swilliams", "target": "kbacon", "arrowhead": "vee" },
-        {"source": "bpitt", "target": "kbacon", "arrowhead": "vee" },
-        {"source": "hford", "target": "lwilson", "arrowhead": "vee" },
-        {"source": "lwilson", "target": "kbacon", "arrowhead": "vee" }
+        {"source": "kspacey", "target": "swilliams", "arrowhead": "vee", "edge_endpoint": "/edge/kspacey/swilliams" },
+        {"source": "swilliams", "target": "kbacon", "arrowhead": "vee", "edge_endpoint": "/edge/swilliams/kbacon" },
+        {"source": "bpitt", "target": "kbacon", "arrowhead": "vee", "edge_endpoint": "/edge/bpitt/kbacon" },
+        {"source": "hford", "target": "lwilson", "arrowhead": "vee", "edge_endpoint": "/edge/hford/lwilson" },
+        {"source": "lwilson", "target": "kbacon", "arrowhead": "vee", "edge_endpoint": "/edge/lwilson/kbacon" }
     ]
 }
 
@@ -73,3 +73,8 @@ async def progress(request: Request, node_id: str, response: Response):
         progress_dict[node_id] = 100
         response.headers["HX-Trigger"] = "done"
         return "100%"
+
+
+@app.get("/edge/{source}/{target}", response_class=HTMLResponse)
+async def edge(request: Request, source: str, target: str):
+    return f"""<p> edge clicked: {source} -> {target} </p>"""
