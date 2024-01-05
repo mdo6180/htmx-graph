@@ -22,12 +22,11 @@
 {% endblock %}
 
 {% block body %}
-<div id="graph" class="graph">
+<div id="graph">
     <!-- container where graph will be rendered -->
     <svg width="960" height="600"><g/></svg>
 
     <section>
-        <div id="insert_text"></div>
         <p>Potomac AI Inc.</p>
     </section>
 </div>
@@ -91,8 +90,8 @@
     // in the future, we will use the endpoint attribute to determine the endpoint for the HTMX request
     node_container.attr("hx-get", (v) => { return g.node(v).endpoint; })
                   .attr("hx-trigger", "click")
-                  .attr("hx-target", "#insert_text")
-                  .attr("hx-swap", "innerHTML");
+                  .attr("hx-target", "#graph")
+                  .attr("hx-swap", "outerHTML");
     
     // apply SVG attributes to the rect element
     const rect = inner.selectAll("rect");
