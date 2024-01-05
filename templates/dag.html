@@ -69,10 +69,10 @@
     var inner = svg.select("g");
 
     // Set up zoom support
-    function zoomed(event) {
+    var zoom = d3.zoom().on("zoom", (event) => {
         inner.attr("transform", event.transform);
-    }
-    svg.call(d3.zoom().on("zoom", zoomed));
+    });
+    svg.call(zoom);
 
     // Create the renderer
     var render = new dagreD3.render();
@@ -106,5 +106,14 @@
         .attr("hx-trigger", "every 1s")
         .attr("hx-swap", "innerHTML");
 
+    // Center the graph
+    var initialScale = 1;
+
+    // Center the graph horizontally in the svg container
+    // Question: what happens if the width of the svg container is smaller than the width of the graph?
+    svg.call(zoom.transform, d3.zoomIdentity.translate((svg.attr("width") - g.graph().width * initialScale) / 2, 20).scale(initialScale));
+    
+    // Center the graph vertically in the svg container by shrinking the height of the svg container
+    // svg.attr('height', g.graph().height * initialScale + 40);
 </script>
 {% endblock %}
