@@ -29,11 +29,11 @@ json_data = {
         { "id": "kbacon", "label": "Kevin Bacon", "width": 121, "height": 100, "endpoint": "/node/kbacon", "progress_endpoint": "/progress/kbacon" }
     ],
     "edges": [
-        {"source": "kspacey", "target": "swilliams", "arrowhead": "vee", "edge_endpoint": "/edge/kspacey/swilliams" },
-        {"source": "swilliams", "target": "kbacon", "arrowhead": "vee", "edge_endpoint": "/edge/swilliams/kbacon" },
-        {"source": "bpitt", "target": "kbacon", "arrowhead": "vee", "edge_endpoint": "/edge/bpitt/kbacon" },
-        {"source": "hford", "target": "lwilson", "arrowhead": "vee", "edge_endpoint": "/edge/hford/lwilson" },
-        {"source": "lwilson", "target": "kbacon", "arrowhead": "vee", "edge_endpoint": "/edge/lwilson/kbacon" }
+        {"source": "kspacey", "target": "swilliams", "arrowhead": "vee", "edge_endpoint": "/edge/kspacey/swilliams", "edge_progress_endpoint": "/edge/kspacey/swilliams/progress" },
+        {"source": "swilliams", "target": "kbacon", "arrowhead": "vee", "edge_endpoint": "/edge/swilliams/kbacon",  "edge_progress_endpoint": "/edge/swilliams/kbacon/progress"},
+        {"source": "bpitt", "target": "kbacon", "arrowhead": "vee", "edge_endpoint": "/edge/bpitt/kbacon", "edge_progress_endpoint": "/edge/bpitt/kbacon/progress" },
+        {"source": "hford", "target": "lwilson", "arrowhead": "vee", "edge_endpoint": "/edge/hford/lwilson", "edge_progress_endpoint": "/edge/hford/lwilson/progress" },
+        {"source": "lwilson", "target": "kbacon", "arrowhead": "vee", "edge_endpoint": "/edge/lwilson/kbacon", "edge_progress_endpoint": "/edge/lwilson/kbacon/progress" }
     ]
 }
 
@@ -78,3 +78,11 @@ async def progress(request: Request, node_id: str, response: Response):
 @app.get("/edge/{source}/{target}", response_class=HTMLResponse)
 async def edge(request: Request, source: str, target: str):
     return f"""<p> edge clicked: {source} -> {target} </p>"""
+
+
+@app.get("/edge/{source}/{target}/progress", response_class=HTMLResponse)
+async def edge_progress_endpoint(request: Request, source: str, target: str):
+    if progress_dict[source] == 100:
+        return "1"
+    else:
+        return "0"

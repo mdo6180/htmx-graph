@@ -16,6 +16,10 @@
     .edgePath path {
       stroke-width: 1.5px;
     }
+
+    .done {
+        fill: red;
+    }
 </style>
 {% endblock %}
 
@@ -65,7 +69,8 @@
             edge.target, 
             { 
                 arrowhead: "vee",
-                edge_endpoint: edge.edge_endpoint
+                edge_endpoint: edge.edge_endpoint,
+                edge_progress_endpoint: edge.edge_progress_endpoint
             }
         );
     });
@@ -113,15 +118,31 @@
     
     const edge = inner.selectAll(".edgePath path.path");
     edge.attr("stroke", "#333");
+    edge.attr("_", (e) => { 
+        return `
+        on load repeat forever 
+            fetch ${g.edge(e).edge_progress_endpoint} 
+            if result is 1 
+                set @stroke to 'red' 
+            end 
+            wait 500ms
+        end`; 
+    })
 
-    const edge_container = inner.selectAll(".edgePath");
-    edge_container.attr("hx-get", (e) => { return g.edge(e).edge_endpoint; })
-        .attr("hx-trigger", "click")
-        .attr("hx-target", "#graph")
-        .attr("hx-swap", "outerHTML");
-    
+    // const edge_container = inner.selectAll(".edgePath");
+
     const arrowhead = inner.selectAll(".edgePath defs marker");
-    arrowhead.attr("fill", "blue");
+    arrowhead.attr("fill", "#333");
+    arrowhead.attr("_", (e) => { 
+        return `
+        on load repeat forever 
+            fetch ${g.edge(e).edge_progress_endpoint} 
+            if result is 1 
+                set @fill to 'red' 
+            end 
+            wait 500ms
+        end`; 
+    })
 
     // Center the graph
     var initialScale = 1;
