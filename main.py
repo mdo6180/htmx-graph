@@ -83,6 +83,6 @@ async def edge(request: Request, source: str, target: str):
 @app.get("/edge/{source}/{target}/progress", response_class=HTMLResponse)
 async def edge_progress_endpoint(request: Request, source: str, target: str):
     if progress_dict[source] == 100:
-        return "1"
+        return "red"
     else:
-        return "0"
+        return "#333"

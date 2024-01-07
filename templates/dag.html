@@ -118,9 +118,7 @@
         return `
         on load repeat forever 
             fetch ${g.edge(e).edge_progress_endpoint} 
-            if result is 1 
-                set @stroke to 'red' 
-            end 
+            set @stroke to result 
             wait 500ms
         end`; 
     })
@@ -133,9 +131,7 @@
         return `
         on load repeat forever 
             fetch ${g.edge(e).edge_progress_endpoint} 
-            if result is 1 
-                set @fill to 'red' 
-            end 
+            set @fill to result 
             wait 500ms
         end`; 
     })
