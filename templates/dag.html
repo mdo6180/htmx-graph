@@ -65,8 +65,7 @@
             edge.target, 
             { 
                 arrowhead: "vee",
-                edge_endpoint: edge.edge_endpoint,
-                edge_progress_endpoint: edge.edge_progress_endpoint
+                endpoint: edge.endpoint
             }
         );
     });
@@ -117,11 +116,11 @@
     edge.attr("_", (e) => { 
         return `
         on load repeat forever 
-            fetch ${g.edge(e).edge_progress_endpoint} 
+            fetch ${g.edge(e).endpoint} 
             set @stroke to result 
             wait 500ms
         end`; 
-    })
+    });
 
     // const edge_container = inner.selectAll(".edgePath");
 
@@ -130,11 +129,11 @@
     arrowhead.attr("_", (e) => { 
         return `
         on load repeat forever 
-            fetch ${g.edge(e).edge_progress_endpoint} 
+            fetch ${g.edge(e).endpoint} 
             set @fill to result 
             wait 500ms
         end`; 
-    })
+    });
 
     // Center the graph
     var initialScale = 1;
