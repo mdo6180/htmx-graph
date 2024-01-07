@@ -7,16 +7,21 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi import Request, Response
 
-from app1.main import app as app1 
-from app2.main import app as app2
+from app1.main import Node1
+from app2.main import Node2
+
+
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="./static"), name="static")
 templates = Jinja2Templates(directory="./templates")
 
+node1 = Node1()
+node2 = Node2()
+
 # mount the app1 app at /app1 and the app2 app at /app2
-app.mount("/app1", app1)
-app.mount("/app2", app2)
+app.mount("/app1", node1.get_app())
+app.mount("/app2", node2.get_app())
 
 
 json_data = {
