@@ -71,14 +71,18 @@ async def progress(request: Request, node_id: str, response: Response):
     global progress_dict
 
     added_progress = random.randint(1, 5)
+
     if progress_dict[node_id] + added_progress < 100:
         progress_dict[node_id] += added_progress
-        return f"{progress_dict[node_id]}%"
+
     elif progress_dict[node_id] + added_progress >= 100:
         progress_dict[node_id] = 100
-        response.headers["HX-Trigger"] = "done"
-        return "100%"
+    
+    if node_id == "bpitt":
+        return "done!" if progress_dict["bpitt"] == 100 else "waiting..."
 
+    return f"{progress_dict[node_id]}%"
+        
 
 @app.get("/edge/{source}/{target}", response_class=HTMLResponse)
 async def edge(request: Request, source: str, target: str):

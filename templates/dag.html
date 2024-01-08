@@ -102,14 +102,17 @@
 
     const text = inner.selectAll(".node .label g text");
     text.append("tspan")
-        .text("0%")
         .attr("space", "preserve")
         .attr("dy", "1em")
         .attr("x", "1")
-        .attr("hx-get", (v) => { return g.node(v).progress_endpoint; })
-        .attr("hx-target", "this")
-        .attr("hx-trigger", "every 1s")
-        .attr("hx-swap", "innerHTML");
+        .attr("_", (v) => { 
+            return `
+            on load repeat forever
+                fetch ${g.node(v).progress_endpoint} 
+                put result into me
+                wait 1s
+            end`; 
+        });
     
     const edge = inner.selectAll(".edgePath path.path");
     edge.attr("stroke", "#333");
