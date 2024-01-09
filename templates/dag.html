@@ -105,14 +105,10 @@
         .attr("space", "preserve")
         .attr("dy", "1em")
         .attr("x", "1")
-        .attr("_", (v) => { 
-            return `
-            on load repeat forever
-                fetch ${g.node(v).progress_endpoint} 
-                put result into me
-                wait 1s
-            end`; 
-        });
+        .attr("hx-get", (v) => { return g.node(v).progress_endpoint; })
+        .attr("hx-target", "this")
+        .attr("hx-trigger", "load, every 1s")
+        .attr("hx-swap", "innerHTML");
     
     const edge = inner.selectAll(".edgePath path.path");
     edge.attr("stroke", "#333");
