@@ -89,7 +89,6 @@
     const node_container = inner.selectAll(".node");
 
     // apply HTMX attributes to the entire node container
-    // in the future, we will use the endpoint attribute to determine the endpoint for the HTMX request
     node_container.attr("hx-get", (v) => { return g.node(v).endpoint; })
                   .attr("hx-trigger", "click")
                   .attr("hx-target", "#graph")
@@ -121,8 +120,6 @@
         end`; 
     });
 
-    // const edge_container = inner.selectAll(".edgePath");
-
     const arrowhead = inner.selectAll(".edgePath defs marker");
     arrowhead.attr("fill", "#333");
     arrowhead.attr("_", (e) => { 
@@ -134,7 +131,6 @@
         end`; 
     });
 
-    // Center the graph
     var initialScale = 1;
 
     // Center the graph horizontally in the svg container
