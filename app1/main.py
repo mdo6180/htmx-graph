@@ -10,13 +10,11 @@ import time
 
 
 
-node_url = "/node1"
-
 app = FastAPI()
 #app.mount("/static", StaticFiles(directory="./app1/static"), name="static")
 #templates = Jinja2Templates(directory="./app1/templates")
 
-@app.get(node_url, response_class=HTMLResponse)
+@app.get("/header", response_class=HTMLResponse)
 async def preprocessing(request: Request):
     # return templates.TemplateResponse("preprocessing.html", {"request": request, "message": "Preprocessing"})
     return "<h1>node1</h1>"
@@ -43,9 +41,6 @@ class Node1(threading.Thread):
     def get_app(self):
         return app
     
-    def get_node_url(self):
-        return node_url
-
     def run(self):
         percentage = self.get_percentage()
         while percentage < 100:

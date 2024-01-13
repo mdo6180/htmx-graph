@@ -20,8 +20,8 @@ node1 = Node1()
 node2 = Node2()
 
 # mount the app1 app at /app1 and the app2 app at /app2
-app.mount(node1.get_node_url(), node1.get_app())
-app.mount(node2.get_node_url(), node2.get_app())
+app.mount("/node1", node1.get_app())
+app.mount("/node2", node2.get_app())
 
 
 json_data = {
