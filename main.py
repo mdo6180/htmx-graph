@@ -6,6 +6,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi import Request, Response
+from fastapi.responses import StreamingResponse
+import asyncio
 
 from app1.main import Node1
 from app2.main import Node2
@@ -34,11 +36,11 @@ json_data = {
         { "id": "kbacon", "label": "Kevin Bacon", "width": 121, "height": 100, "endpoint": "/node/kbacon", "progress_endpoint": "/progress/kbacon" }
     ],
     "edges": [
-        {"source": "kspacey", "target": "swilliams", "arrowhead": "vee", "endpoint": "/edge/kspacey/swilliams" },
-        {"source": "swilliams", "target": "kbacon", "arrowhead": "vee", "endpoint": "/edge/swilliams/kbacon" },
-        {"source": "bpitt", "target": "kbacon", "arrowhead": "vee", "endpoint": "/edge/bpitt/kbacon" },
-        {"source": "hford", "target": "lwilson", "arrowhead": "vee", "endpoint": "/edge/hford/lwilson" },
-        {"source": "lwilson", "target": "kbacon", "arrowhead": "vee", "endpoint": "/edge/lwilson/kbacon" }
+        {"source": "kspacey", "target": "swilliams", "arrowhead": "vee", "endpoint": "/edge/?source=kspacey&target=swilliams" },
+        {"source": "swilliams", "target": "kbacon", "arrowhead": "vee", "endpoint": "/edge/?source=swilliams&target=kbacon" },
+        {"source": "bpitt", "target": "kbacon", "arrowhead": "vee", "endpoint": "/edge/?source=bpitt&target=kbacon" },
+        {"source": "hford", "target": "lwilson", "arrowhead": "vee", "endpoint": "/edge/?source=hford&target=lwilson" },
+        {"source": "lwilson", "target": "kbacon", "arrowhead": "vee", "endpoint": "/edge/?source=lwilson&target=kbacon" }
     ]
 }
 
@@ -84,9 +86,12 @@ async def progress(request: Request, node_id: str, response: Response):
     return f"{progress_dict[node_id]}%"
         
 
-@app.get("/edge/{source}/{target}", response_class=HTMLResponse)
+@app.get("/edge/", response_class=HTMLResponse)
 async def edge(request: Request, source: str, target: str):
-    if progress_dict[source] == 100:
-        return "red"
-    else:
-        return "#333"
+    async def event_stream():
+        while True:
+            if progress_dict[source] == 100:
+                yield "event: done\n"
+                yield f"data: red\n\n"
+            await asyncio.sleep(0.2)
+    return StreamingResponse(event_stream(), media_type="text/event-stream")

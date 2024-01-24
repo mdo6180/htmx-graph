@@ -4,6 +4,7 @@
 <script src="https://d3js.org/d3.v6.min.js"></script>
 <script src="/static/js/dagre.min.js"></script>
 <script src="/static/js/dagre-d3.min.js"></script>
+<script src="https://unpkg.com/hyperscript.org@0.9.4/dist/eventsource.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/static/css/index.css">
 
 <style id="css">
@@ -64,7 +65,8 @@
         g.setEdge(
             edge.source, 
             edge.target, 
-            { 
+            {
+                name: edge.source, 
                 arrowhead: "vee",
                 endpoint: edge.endpoint
             }
@@ -110,25 +112,22 @@
         .attr("hx-trigger", "load, every 1s")
         .attr("hx-swap", "innerHTML");
     
+    const arrowhead = inner.selectAll(".edgePath defs marker");
+    arrowhead.attr("fill", "#333");
+
     const edge = inner.selectAll(".edgePath path.path");
     edge.attr("stroke", "#333");
     edge.attr("_", (e) => { 
         return `
-        on load repeat forever 
-            fetch ${g.edge(e).endpoint} 
-            set @stroke to result 
-            wait 500ms
-        end`; 
-    });
-
-    const arrowhead = inner.selectAll(".edgePath defs marker");
-    arrowhead.attr("fill", "#333");
-    arrowhead.attr("_", (e) => { 
-        return `
-        on load repeat forever 
-            fetch ${g.edge(e).endpoint} 
-            set @fill to result 
-            wait 500ms
+        on load
+            set global ${g.edge(e).name}_path to me
+            set global ${g.edge(e).name}_arrowhead to the next <marker/> 
+            eventsource event_stream from ${g.edge(e).endpoint} 
+                on done as string
+                    set ${g.edge(e).name}_path @stroke to it 
+                    set ${g.edge(e).name}_arrowhead @fill to it
+                end
+            end
         end`; 
     });
 
