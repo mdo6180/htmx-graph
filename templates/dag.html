@@ -120,8 +120,11 @@
     edge.attr("_", (e) => { 
         return `
         on load
+            -- create global variables to store the edge's line and arrowhead
             set global ${g.edge(e).name}_path to me
             set global ${g.edge(e).name}_arrowhead to the next <marker/> 
+
+            -- listen for a 'done' event, change the color of the line and arrowhead to the color specified in the data packet
             eventsource event_stream from ${g.edge(e).endpoint} 
                 on done as string
                     set ${g.edge(e).name}_path @stroke to it 
