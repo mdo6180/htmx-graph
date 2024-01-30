@@ -3,4 +3,3 @@ lib/
 __pycache__/
 **/nx.html
 virtualenv/
-static/js/htmx.min.js

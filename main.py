@@ -98,6 +98,6 @@ async def edge(request: Request, source: str, target: str):
             except asyncio.CancelledError:
                 yield "event: close\n"
                 yield f"data: edge sse closed: {source} -> {target}\n\n"
-                print("closing")
+                print(f"closing edge sse: {source} -> {target}")
                 break
     return StreamingResponse(event_stream(), media_type="text/event-stream")
