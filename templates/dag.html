@@ -130,6 +130,10 @@
                     set ${g.edge(e).name}_path @stroke to it 
                     set ${g.edge(e).name}_arrowhead @fill to it
                 end
+                on close as string
+                    log it
+                    call event_stream.close()
+                end
             end
         end`; 
     });

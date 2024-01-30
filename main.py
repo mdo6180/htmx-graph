@@ -90,8 +90,14 @@ async def progress(request: Request, node_id: str, response: Response):
 async def edge(request: Request, source: str, target: str):
     async def event_stream():
         while True:
-            if progress_dict[source] == 100:
-                yield "event: done\n"
-                yield f"data: red\n\n"
-            await asyncio.sleep(0.2)
+            try:
+                if progress_dict[source] == 100:
+                    yield "event: done\n"
+                    yield f"data: red\n\n"
+                await asyncio.sleep(0.2)
+            except asyncio.CancelledError:
+                yield "event: close\n"
+                yield f"data: edge sse closed: {source} -> {target}\n\n"
+                print("closing")
+                break
     return StreamingResponse(event_stream(), media_type="text/event-stream")
