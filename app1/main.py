@@ -3,6 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi import Request, Response
+from whitehouse.default import *
 
 import threading
 import random
@@ -11,14 +12,16 @@ import time
 
 
 app = FastAPI()
-#app.mount("/static", StaticFiles(directory="./app1/static"), name="static")
-#templates = Jinja2Templates(directory="./app1/templates")
+app.mount("/static", StaticFiles(directory="./app1/static"), name="static")
+templates = Jinja2Templates(directory="./app1/templates")
 
 @app.get("/header", response_class=HTMLResponse)
-async def preprocessing(request: Request):
-    # return templates.TemplateResponse("preprocessing.html", {"request": request, "message": "Preprocessing"})
-    return "<h1>node1</h1>"
+async def header_route(request: Request):
+    return """<h1 id="app1">node1</h1>"""
 
+@app.get("/preprocessing", response_class=HTMLResponse)
+async def preprocessing_route(request: Request):
+    return templates.TemplateResponse("preprocessing.html", {"request": request, "message": "Preprocessing"})
 
 
 class Node1(threading.Thread):
@@ -31,6 +34,9 @@ class Node1(threading.Thread):
         while True:
             with self.lock:
                 return self.percentage
+    
+    def get_header(self):
+        return link({"rel": "stylesheet", "type": "text/css", "href": "/node1/static/css/app1.css"})
     
     def set_percentage(self, percentage):
         while True:

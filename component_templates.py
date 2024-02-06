@@ -5,7 +5,12 @@ from whitehouse.base import Component
 
 
 class IndexTemplate(Template):
-    def __init__(self, children: Union[str, 'Component', List['Component']], json_data):
+    def __init__(
+        self, 
+        children: Union[str, 'Component', List['Component']], 
+        json_data,
+        headers:  Union[str, 'Component', List['Component']] = [], 
+    ):
         super().__init__(
             html([
                 head([
@@ -19,6 +24,7 @@ class IndexTemplate(Template):
                     script("", {"src": "/static/js/dagre.min.js", "type": "text/javascript"}),
                     script("", {"src": "/static/js/dagre-d3.min.js", "type": "text/javascript"}),
                     link({"rel": "stylesheet", "type": "text/css", "href": "/static/css/index.css"}),
+                    *headers
                 ]),
                 body([
                     div([

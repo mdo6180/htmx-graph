@@ -1,7 +1,7 @@
 import random
 from typing import Annotated
 
-from fastapi import FastAPI, APIRouter, Header
+from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from fastapi import Request, Response
@@ -27,7 +27,6 @@ node2 = Node2()
 app.mount("/node1", node1.get_app())
 app.mount("/node2", node2.get_app())
 
-
 json_data = {
     "nodes": [
         { "id": "kspacey", "label": "Kevin Spacey", "width": 144, "height": 100, "endpoint": "/node/kspacey", "progress_endpoint": "/progress/kspacey", },
@@ -51,7 +50,7 @@ json_data = {
 async def index(request: Request):
     return format_html(
         IndexTemplate(
-            [
+            children=[
                 div([
                         svg("<g/>", {"width": "960", "height": "600"}),
                         section(
@@ -60,7 +59,7 @@ async def index(request: Request):
                     ], {"id": "graph"}),
                 script("", {"src": "/static/js/dag.js", "graph-data": json_data}),
             ],
-            json_data
+            json_data=json_data,
         )
     )
 

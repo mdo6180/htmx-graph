@@ -4,6 +4,9 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi import Request, Response
 
+from whitehouse.default import *
+from whitehouse.utils import format_html
+
 import threading
 import random
 import time
@@ -17,7 +20,17 @@ app.mount("/static", StaticFiles(directory="./app2/static"), name="static")
 
 @app.get("/header", response_class=HTMLResponse)
 async def training():
-    return "<h1>node2</h1>"
+    return format_html(
+        html([
+            head([
+                title("Node2"),
+                link({"rel": "stylesheet", "type": "text/css", "href": "/node2/static/css/app2.css"})
+            ]),
+            body([
+                h1("node2", {"id": "app2"})
+            ])
+        ])
+    )
 
 
 
@@ -40,6 +53,9 @@ class Node2(threading.Thread):
     
     def get_app(self):
         return app
+    
+    def get_header(self):
+        return link({"rel": "stylesheet", "type": "text/css", "href": "/node2/static/css/app2.css"})
     
     def run(self):
         percentage = self.get_percentage()
