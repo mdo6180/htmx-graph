@@ -4,7 +4,6 @@ from typing import Annotated
 from fastapi import FastAPI, APIRouter, Header
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
 from fastapi import Request, Response
 from fastapi.responses import StreamingResponse
 import asyncio
@@ -20,7 +19,6 @@ from app2.main import Node2
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="./static"), name="static")
-templates = Jinja2Templates(directory="./templates")
 
 node1 = Node1()
 node2 = Node2()
@@ -51,7 +49,6 @@ json_data = {
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    #return templates.TemplateResponse("dag.html", {"request": request, "nodes": json_data["nodes"], "json_data": json_data})
     return format_html(
         IndexTemplate(
             [
