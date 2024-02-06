@@ -11,13 +11,12 @@ import time
 
 
 app = FastAPI()
-#app.mount("/static", StaticFiles(directory="./app1/static"), name="static")
-#templates = Jinja2Templates(directory="./app1/templates")
+app.mount("/static", StaticFiles(directory="./app1/static"), name="static")
+templates = Jinja2Templates(directory="./app1/templates")
 
 @app.get("/header", response_class=HTMLResponse)
 async def preprocessing(request: Request):
-    # return templates.TemplateResponse("preprocessing.html", {"request": request, "message": "Preprocessing"})
-    return "<h1>node1</h1>"
+    return templates.TemplateResponse("preprocessing.html", {"request": request, "message": "Preprocessing"})
 
 
 
