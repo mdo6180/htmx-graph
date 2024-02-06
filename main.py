@@ -9,6 +9,10 @@ from fastapi import Request, Response
 from fastapi.responses import StreamingResponse
 import asyncio
 
+from whitehouse.default import *
+from whitehouse.utils import format_html
+from component_templates import IndexTemplate
+
 from app1.main import Node1
 from app2.main import Node2
 
@@ -47,7 +51,21 @@ json_data = {
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    return templates.TemplateResponse("dag.html", {"request": request, "nodes": json_data["nodes"], "json_data": json_data})
+    #return templates.TemplateResponse("dag.html", {"request": request, "nodes": json_data["nodes"], "json_data": json_data})
+    return format_html(
+        IndexTemplate(
+            [
+                div([
+                        svg("<g/>", {"width": "960", "height": "600"}),
+                        section(
+                            p("Potomac AI Inc.")
+                        )
+                    ], {"id": "graph"}),
+                script("", {"src": "/static/js/dag.js", "graph-data": json_data}),
+            ],
+            json_data
+        )
+    )
 
 
 @app.get("/node/{node_id}", response_class=HTMLResponse)
