@@ -7,6 +7,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi import Request, Response
 from fastapi.responses import StreamingResponse
+import uvicorn
 import asyncio
 
 from app1.main import Node1
@@ -101,3 +102,7 @@ async def edge(request: Request, source: str, target: str):
                 print(f"closing edge sse: {source} -> {target}")
                 break
     return StreamingResponse(event_stream(), media_type="text/event-stream")
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="localhost", port=8000)

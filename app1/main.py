@@ -7,12 +7,13 @@ from fastapi import Request, Response
 import threading
 import random
 import time
+import os
 
 
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="./app1/static"), name="static")
-templates = Jinja2Templates(directory="./app1/templates")
+app.mount("/static", StaticFiles(directory=f"{os.path.abspath(__package__)}/static"), name="static")
+templates = Jinja2Templates(directory=f"{os.path.abspath(__package__)}/templates")
 
 @app.get("/header", response_class=HTMLResponse)
 async def preprocessing(request: Request):
