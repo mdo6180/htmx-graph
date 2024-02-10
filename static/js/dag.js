@@ -78,7 +78,7 @@ text.append("tspan")
     .attr("hx-get", (v) => { return g.node(v).progress_endpoint; })
     .attr("hx-target", "this")
     .attr("hx-trigger", "load, every 1s")
-    .attr("hx-swap", "innerHTML")
+    .attr("hx-swap", "innerHTML");
 
 const arrowhead = inner.selectAll(".edgePath defs marker");
 arrowhead.attr("fill", "#333");

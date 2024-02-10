@@ -3,3 +3,4 @@ lib/
 __pycache__/
 **/nx.html
 virtualenv/
+.vscode/
